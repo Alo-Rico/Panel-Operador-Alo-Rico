@@ -1,206 +1,403 @@
-export default function AloRicoPanel() {
-  const pedidos = [
-    {
-      mesa: "Mesa 4",
-      estado: "Pendiente",
-      color: "bg-yellow-500",
-      total: "70.000",
-      tiempo: "Hace 3 min",
-      items: ["2x Mega Burger", "1x Coca Cola"]
-    },
-    {
-      mesa: "Mesa 7",
-      estado: "Preparando",
-      color: "bg-blue-500",
-      total: "95.000",
-      tiempo: "Hace 7 min",
-      items: ["1x Pizza Familiar", "2x Pepsi"]
-    },
-    {
-      mesa: "Delivery",
-      estado: "Listo",
-      color: "bg-green-500",
-      total: "120.000",
-      tiempo: "Hace 12 min",
-      items: ["3x Lomito Completo", "1x Papas"]
-    }
-  ];
+# index.html
 
-  return (
-    <div className="min-h-screen bg-[#0f172a] text-white p-6">
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
 
-      {/* HEADER */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-        <div>
-          <h1 className="text-4xl font-bold text-yellow-400">
-            Alo Rico Panel
-          </h1>
-          <p className="text-gray-400 mt-1">
-            Sistema Operador + Cocina + Delivery
-          </p>
-        </div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full md:w-auto">
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 shadow-xl min-w-[140px]">
-            <p className="text-gray-400 text-sm">Ventas Hoy</p>
-            <h2 className="text-2xl font-bold text-green-400">
-              Gs. 2.450.000
-            </h2>
-          </div>
+<title>Alo Rico - Panel Operador</title>
 
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 shadow-xl min-w-[140px]">
-            <p className="text-gray-400 text-sm">Pedidos</p>
-            <h2 className="text-2xl font-bold text-blue-400">
-              84
-            </h2>
-          </div>
+<script src="https://cdn.tailwindcss.com"></script>
 
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 shadow-xl min-w-[140px]">
-            <p className="text-gray-400 text-sm">Delivery</p>
-            <h2 className="text-2xl font-bold text-orange-400">
-              12
-            </h2>
-          </div>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 shadow-xl min-w-[140px]">
-            <p className="text-gray-400 text-sm">Producto Top</p>
-            <h2 className="text-lg font-bold text-pink-400">
-              Mega Burger
-            </h2>
-          </div>
-        </div>
-      </div>
+<style>
 
-      {/* COLUMNAS */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        {/* PENDIENTES */}
-        <div className="bg-white/5 rounded-3xl p-5 backdrop-blur-lg border border-white/10">
-          <h2 className="text-2xl font-bold mb-5 text-yellow-400">
-            Pendientes
-          </h2>
-
-          <div className="space-y-5">
-            {pedidos.map((p, index) => (
-              <div
-                key={index}
-                className="bg-[#1e293b] rounded-3xl p-5 shadow-2xl border border-white/10"
-              >
-                <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-xl font-bold">{p.mesa}</h3>
-
-                  <span className={`${p.color} px-3 py-1 rounded-full text-sm font-bold`}>
-                    {p.estado}
-                  </span>
-                </div>
-
-                <div className="space-y-2 text-gray-200 mb-4">
-                  {p.items.map((item, i) => (
-                    <p key={i}>{item}</p>
-                  ))}
-                </div>
-
-                <div className="flex justify-between items-center mb-4">
-                  <span className="text-green-400 font-bold text-xl">
-                    Gs. {p.total}
-                  </span>
-
-                  <span className="text-gray-400 text-sm">
-                    {p.tiempo}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <button className="bg-blue-500 hover:bg-blue-600 rounded-2xl py-3 font-bold transition">
-                    Enviar Cocina
-                  </button>
-
-                  <button className="bg-green-500 hover:bg-green-600 rounded-2xl py-3 font-bold transition">
-                    Listo
-                  </button>
-
-                  <button className="bg-orange-500 hover:bg-orange-600 rounded-2xl py-3 font-bold transition">
-                    WhatsApp
-                  </button>
-
-                  <button className="bg-red-500 hover:bg-red-600 rounded-2xl py-3 font-bold transition">
-                    Cancelar
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* COCINA */}
-        <div className="bg-white/5 rounded-3xl p-5 backdrop-blur-lg border border-white/10">
-          <h2 className="text-2xl font-bold mb-5 text-blue-400">
-            Cocina
-          </h2>
-
-          <div className="space-y-5">
-            <div className="bg-[#1e293b] rounded-3xl p-5 border border-white/10">
-              <h3 className="text-2xl font-bold mb-4">Mesa 3</h3>
-
-              <div className="space-y-2 text-lg">
-                <p>🍔 2x Mega Burger</p>
-                <p>🥤 1x Coca Cola</p>
-                <p>🍟 1x Papas</p>
-              </div>
-
-              <div className="mt-5 flex justify-between items-center">
-                <span className="text-yellow-400 font-bold">
-                  ⏱ 5 min
-                </span>
-
-                <button className="bg-green-500 hover:bg-green-600 px-5 py-3 rounded-2xl font-bold transition">
-                  Terminado
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* DELIVERY */}
-        <div className="bg-white/5 rounded-3xl p-5 backdrop-blur-lg border border-white/10">
-          <h2 className="text-2xl font-bold mb-5 text-green-400">
-            Delivery
-          </h2>
-
-          <div className="bg-[#1e293b] rounded-3xl p-5 border border-white/10 space-y-3">
-            <h3 className="text-2xl font-bold">Juan Perez</h3>
-
-            <p className="text-gray-300">
-              📍 Itaugua Centro
-            </p>
-
-            <p className="text-gray-300">
-              📞 0971 111111
-            </p>
-
-            <div className="border-t border-white/10 pt-4 space-y-2">
-              <div className="flex justify-between">
-                <span>Pedido</span>
-                <span>Gs. 85.000</span>
-              </div>
-
-              <div className="flex justify-between">
-                <span>Delivery</span>
-                <span>Gs. 10.000</span>
-              </div>
-
-              <div className="flex justify-between text-green-400 font-bold text-xl pt-2">
-                <span>Total Cobrar</span>
-                <span>Gs. 95.000</span>
-              </div>
-            </div>
-
-            <button className="w-full bg-green-500 hover:bg-green-600 py-4 rounded-2xl font-bold mt-4 transition">
-              Entregado
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+*{
+ margin:0;
+ padding:0;
+ box-sizing:border-box;
 }
+
+body{
+ font-family:'Poppins',sans-serif;
+ background:#0f172a;
+ color:white;
+ overflow-x:hidden;
+}
+
+body::before{
+ content:"";
+ position:fixed;
+ inset:0;
+ background:
+ linear-gradient(rgba(0,0,0,.82),rgba(0,0,0,.90)),
+ url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1600&auto=format&fit=crop');
+ background-size:cover;
+ background-position:center;
+ z-index:-2;
+}
+
+body::after{
+ content:"";
+ position:fixed;
+ inset:0;
+ backdrop-filter:blur(8px);
+ z-index:-1;
+}
+
+.card{
+ background:rgba(255,255,255,.06);
+ border:1px solid rgba(255,255,255,.08);
+ backdrop-filter:blur(12px);
+ border-radius:28px;
+ box-shadow:0 10px 35px rgba(0,0,0,.35);
+}
+
+.pedido-card{
+ background:#1e293b;
+ border-radius:24px;
+ padding:22px;
+ border:1px solid rgba(255,255,255,.08);
+ box-shadow:0 10px 30px rgba(0,0,0,.35);
+ transition:.25s;
+}
+
+.pedido-card:hover{
+ transform:translateY(-4px);
+}
+
+.btn{
+ border:none;
+ border-radius:18px;
+ padding:14px;
+ font-weight:700;
+ cursor:pointer;
+ transition:.25s;
+ color:white;
+}
+
+.btn:hover{
+ transform:scale(1.03);
+}
+
+.scroll-area{
+ max-height:75vh;
+ overflow:auto;
+ padding-right:4px;
+}
+
+.scroll-area::-webkit-scrollbar{
+ width:6px;
+}
+
+.scroll-area::-webkit-scrollbar-thumb{
+ background:#475569;
+ border-radius:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="p-6">
+
+<!-- HEADER -->
+
+<div class="flex flex-col xl:flex-row justify-between gap-5 mb-8">
+
+ <div>
+  <h1 class="text-5xl font-bold text-yellow-400">
+   Alo Rico Panel
+  </h1>
+
+  <p class="text-gray-300 mt-2 text-lg">
+   Operador • Cocina • Delivery
+  </p>
+ </div>
+
+ <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+  <div class="card p-5 min-w-[170px]">
+   <p class="text-gray-400 text-sm">
+    Ventas Hoy
+   </p>
+
+   <h2 class="text-2xl font-bold text-green-400 mt-2">
+    Gs. 2.450.000
+   </h2>
+  </div>
+
+  <div class="card p-5 min-w-[170px]">
+   <p class="text-gray-400 text-sm">
+    Pedidos Activos
+   </p>
+
+   <h2 class="text-2xl font-bold text-blue-400 mt-2">
+    84
+   </h2>
+  </div>
+
+  <div class="card p-5 min-w-[170px]">
+   <p class="text-gray-400 text-sm">
+    Deliverys
+   </p>
+
+   <h2 class="text-2xl font-bold text-orange-400 mt-2">
+    12
+   </h2>
+  </div>
+
+  <div class="card p-5 min-w-[170px]">
+   <p class="text-gray-400 text-sm">
+    Producto Top
+   </p>
+
+   <h2 class="text-xl font-bold text-pink-400 mt-2">
+    Mega Burger
+   </h2>
+  </div>
+
+ </div>
+
+</div>
+
+<!-- COLUMNAS -->
+
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+ <!-- OPERADOR -->
+
+ <div class="card p-5">
+
+  <h2 class="text-3xl font-bold text-yellow-400 mb-5">
+   Pedidos Pendientes
+  </h2>
+
+  <div class="scroll-area space-y-5">
+
+   <div class="pedido-card">
+
+    <div class="flex justify-between items-center mb-4">
+     <h3 class="text-2xl font-bold">
+      Mesa 4
+     </h3>
+
+     <span class="bg-yellow-500 px-4 py-1 rounded-full font-bold text-sm">
+      Pendiente
+     </span>
+    </div>
+
+    <div class="space-y-2 text-lg text-gray-200">
+     <p>🍔 2x Mega Burger</p>
+     <p>🥤 1x Coca Cola</p>
+    </div>
+
+    <div class="flex justify-between items-center mt-5 mb-5">
+
+     <span class="text-green-400 font-bold text-2xl">
+      Gs. 70.000
+     </span>
+
+     <span class="text-gray-400 text-sm">
+      Hace 3 min
+     </span>
+
+    </div>
+
+    <div class="grid grid-cols-2 gap-3">
+
+     <button class="btn bg-blue-500 hover:bg-blue-600">
+      Enviar Cocina
+     </button>
+
+     <button class="btn bg-green-500 hover:bg-green-600">
+      Listo
+     </button>
+
+     <button class="btn bg-orange-500 hover:bg-orange-600">
+      WhatsApp
+     </button>
+
+     <button class="btn bg-red-500 hover:bg-red-600">
+      Cancelar
+     </button>
+
+    </div>
+
+   </div>
+
+   <div class="pedido-card">
+
+    <div class="flex justify-between items-center mb-4">
+     <h3 class="text-2xl font-bold">
+      Mesa 8
+     </h3>
+
+     <span class="bg-blue-500 px-4 py-1 rounded-full font-bold text-sm">
+      Preparando
+     </span>
+    </div>
+
+    <div class="space-y-2 text-lg text-gray-200">
+     <p>🍕 1x Pizza Familiar</p>
+     <p>🥤 2x Pepsi</p>
+    </div>
+
+    <div class="flex justify-between items-center mt-5 mb-5">
+
+     <span class="text-green-400 font-bold text-2xl">
+      Gs. 95.000
+     </span>
+
+     <span class="text-gray-400 text-sm">
+      Hace 8 min
+     </span>
+
+    </div>
+
+    <div class="grid grid-cols-2 gap-3">
+
+     <button class="btn bg-blue-500 hover:bg-blue-600">
+      Cocina
+     </button>
+
+     <button class="btn bg-green-500 hover:bg-green-600">
+      Entregado
+     </button>
+
+     <button class="btn bg-orange-500 hover:bg-orange-600">
+      WhatsApp
+     </button>
+
+     <button class="btn bg-red-500 hover:bg-red-600">
+      Cancelar
+     </button>
+
+    </div>
+
+   </div>
+
+  </div>
+
+ </div>
+
+ <!-- COCINA -->
+
+ <div class="card p-5">
+
+  <h2 class="text-3xl font-bold text-blue-400 mb-5">
+   Cocina
+  </h2>
+
+  <div class="scroll-area space-y-5">
+
+   <div class="pedido-card">
+
+    <div class="flex justify-between items-center mb-5">
+
+     <h3 class="text-3xl font-bold">
+      Mesa 3
+     </h3>
+
+     <span class="text-yellow-400 font-bold text-lg">
+      ⏱ 5 min
+     </span>
+
+    </div>
+
+    <div class="space-y-3 text-xl">
+
+     <p>🍔 2x Mega Burger</p>
+     <p>🍟 1x Papas</p>
+     <p>🥤 1x Coca Cola</p>
+
+    </div>
+
+    <button class="btn bg-green-500 hover:bg-green-600 w-full mt-6 text-lg">
+     Pedido Terminado
+    </button>
+
+   </div>
+
+  </div>
+
+ </div>
+
+ <!-- DELIVERY -->
+
+ <div class="card p-5">
+
+  <h2 class="text-3xl font-bold text-green-400 mb-5">
+   Delivery
+  </h2>
+
+  <div class="scroll-area space-y-5">
+
+   <div class="pedido-card">
+
+    <h3 class="text-2xl font-bold mb-4">
+     Juan Perez
+    </h3>
+
+    <div class="space-y-3 text-gray-200 text-lg">
+
+     <p>📍 Itaugua Centro</p>
+
+     <p>📞 0971 111111</p>
+
+    </div>
+
+    <div class="border-t border-white/10 mt-5 pt-5 space-y-3">
+
+     <div class="flex justify-between text-lg">
+      <span>Pedido</span>
+      <span>Gs. 85.000</span>
+     </div>
+
+     <div class="flex justify-between text-lg">
+      <span>Delivery</span>
+      <span>Gs. 10.000</span>
+     </div>
+
+     <div class="flex justify-between text-2xl font-bold text-green-400 pt-2">
+      <span>Total</span>
+      <span>Gs. 95.000</span>
+     </div>
+
+    </div>
+
+    <button class="btn bg-green-500 hover:bg-green-600 w-full mt-6 text-lg">
+     Entregado
+    </button>
+
+   </div>
+
+  </div>
+
+ </div>
+
+</div>
+
+</div>
+
+</body>
+</html>
+```
+
+# Cómo usar
+
+1. Crear nuevo repositorio
+2. Crear archivo index.html
+3. Copiar TODO el contenido
+4. Subir a GitHub
+5. Activar GitHub Pages
+
+Ya tendrás una demo visual del panel profesional.
