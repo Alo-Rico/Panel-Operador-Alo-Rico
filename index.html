@@ -77,6 +77,7 @@ body::after{
 }
 
 @keyframes fadeIn{
+
  from{
   opacity:0;
   transform:translateY(20px);
@@ -86,6 +87,7 @@ body::after{
   opacity:1;
   transform:translateY(0);
  }
+
 }
 
 /* BOTONES */
@@ -121,12 +123,6 @@ body::after{
  border-radius:20px;
 }
 
-/* SONIDO */
-
-#nuevo-pedido{
- display:none;
-}
-
 /* RESPONSIVE */
 
 @media(max-width:900px){
@@ -142,11 +138,6 @@ body::after{
 </head>
 
 <body>
-
-<audio
- id="nuevo-pedido"
- src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3">
-</audio>
 
 <div class="p-6">
 
@@ -279,6 +270,13 @@ body::after{
 
 </div>
 
+<!-- SONIDO -->
+
+<audio
+ id="nuevo-pedido"
+ src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3">
+</audio>
+
 <!-- FIREBASE -->
 
 <script type="module">
@@ -346,9 +344,9 @@ document.getElementById("nuevo-pedido");
 
 /* CONTROL SONIDO */
 
-let pedidosAnteriores = 0;
+let totalAnterior = 0;
 
-/* ESCUCHAR PEDIDOS */
+/* LEER PEDIDOS */
 
 onValue(ref(db,"pedidos"),(snap)=>{
 
@@ -360,12 +358,13 @@ onValue(ref(db,"pedidos"),(snap)=>{
 
  let totalGeneral = 0;
  let totalPedidos = 0;
- let totalDelivery = 0;
+ let totalDeliverys = 0;
 
  if(!data){
 
   ventasHoy.innerText = "Gs. 0";
   cantidadPedidos.innerText = "0";
+  cantidadDelivery.innerText = "0";
 
   return;
  }
@@ -373,11 +372,13 @@ onValue(ref(db,"pedidos"),(snap)=>{
  const mesas =
  Object.entries(data);
 
- if(mesas.length > pedidosAnteriores){
+ /* SONIDO */
+
+ if(mesas.length > totalAnterior){
 
   audio.play();
 
-  pedidosAnteriores = mesas.length;
+  totalAnterior = mesas.length;
  }
 
  mesas.forEach(([mesa,pedidos])=>{
@@ -403,7 +404,7 @@ onValue(ref(db,"pedidos"),(snap)=>{
 
   if(mesa.includes("delivery")){
 
-   totalDelivery++;
+   totalDeliverys++;
   }
 
   const card =
@@ -496,26 +497,10 @@ onValue(ref(db,"pedidos"),(snap)=>{
     </button>
 
    </div>
+
   `;
 
   contenedorPedidos.appendChild(card);
-
-  /* COCINA */
-
-  const cocina =
-  card.cloneNode(true);
-
-  contenedorCocina.appendChild(cocina);
-
-  /* DELIVERY */
-
-  if(mesa.includes("delivery")){
-
-   const delivery =
-   card.cloneNode(true);
-
-   contenedorDelivery.appendChild(delivery);
-  }
 
  });
 
@@ -526,7 +511,7 @@ onValue(ref(db,"pedidos"),(snap)=>{
  totalPedidos;
 
  cantidadDelivery.innerText =
- totalDelivery;
+ totalDeliverys;
 
 });
 
