@@ -287,7 +287,8 @@ from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
 import {
  getDatabase,
  ref,
- onValue
+ onValue,
+ remove
 }
 from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
@@ -472,27 +473,26 @@ onValue(ref(db,"pedidos"),(snap)=>{
     grid grid-cols-2 gap-3
    ">
 
-    <button class="
-     btn bg-blue-500
-    ">
+    <button
+     class="btn bg-blue-500"
+     id="cocina-${mesa}">
      Cocina
     </button>
 
-    <button class="
-     btn bg-green-500
-    ">
+    <button
+     class="btn bg-green-500"
+     id="listo-${mesa}">
      Listo
     </button>
 
-    <button class="
-     btn bg-orange-500
-    ">
+    <button
+     class="btn bg-orange-500">
      WhatsApp
     </button>
 
-    <button class="
-     btn bg-red-500
-    ">
+    <button
+     class="btn bg-red-500"
+     id="cancelar-${mesa}">
      Cancelar
     </button>
 
@@ -501,6 +501,59 @@ onValue(ref(db,"pedidos"),(snap)=>{
   `;
 
   contenedorPedidos.appendChild(card);
+
+  /* BOTON COCINA */
+
+  setTimeout(()=>{
+
+   const btnCocina =
+   document.getElementById(`cocina-${mesa}`);
+
+   if(btnCocina){
+
+    btnCocina.onclick = ()=>{
+
+     contenedorCocina.appendChild(card);
+
+    };
+
+   }
+
+   /* BOTON LISTO */
+
+   const btnListo =
+   document.getElementById(`listo-${mesa}`);
+
+   if(btnListo){
+
+    btnListo.onclick = ()=>{
+
+     card.remove();
+
+    };
+
+   }
+
+   /* BOTON CANCELAR */
+
+   const btnCancelar =
+   document.getElementById(`cancelar-${mesa}`);
+
+   if(btnCancelar){
+
+    btnCancelar.onclick = ()=>{
+
+     if(confirm("Cancelar pedido?")){
+
+      remove(ref(db,"pedidos/" + mesa));
+
+     }
+
+    };
+
+   }
+
+  },100);
 
  });
 
