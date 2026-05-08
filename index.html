@@ -388,7 +388,7 @@ document.getElementById("nuevo-pedido");
 
 let totalAnterior = 0;
 
-/* LEER PEDIDOS */
+/* LEER PEDIDOS EN VIVO */
 
 onValue(ref(db,"pedidos"),(snap)=>{
 
@@ -413,6 +413,8 @@ onValue(ref(db,"pedidos"),(snap)=>{
  const mesas =
  Object.entries(data);
 
+ /* SONIDO */
+
  if(mesas.length > totalAnterior){
 
   audio.play();
@@ -422,12 +424,12 @@ onValue(ref(db,"pedidos"),(snap)=>{
 
  mesas.forEach(([mesa,pedido])=>{
 
-  /* ESTADO */
+  let estado = "pendiente";
 
-  let estado =
-  pedido.estado || "pendiente";
+  if(pedido.estado){
 
-  /* ITEMS */
+   estado = pedido.estado;
+  }
 
   let itemsHTML = "";
 
@@ -436,9 +438,15 @@ onValue(ref(db,"pedidos"),(snap)=>{
   Object.entries(pedido)
   .forEach(([k,p])=>{
 
-   if(typeof p === "object" && p.nombre){
+   if(
+    typeof p === "object" &&
+    p !== null &&
+    p.nombre
+   ){
 
-    total += p.precio * p.cantidad;
+    total +=
+    Number(p.precio) *
+    Number(p.cantidad);
 
     itemsHTML += `
      <p>
@@ -453,12 +461,7 @@ onValue(ref(db,"pedidos"),(snap)=>{
 
   totalPedidos++;
 
-  /* TIEMPO */
-
-  const tiempo =
-  "En vivo";
-
-  /* COLOR */
+  /* COLOR ESTADO */
 
   let estadoClass =
   "estado-pendiente";
@@ -545,7 +548,7 @@ onValue(ref(db,"pedidos"),(snap)=>{
      text-gray-400
      text-sm
     ">
-     ${tiempo}
+     En vivo
     </span>
 
    </div>
@@ -579,9 +582,10 @@ onValue(ref(db,"pedidos"),(snap)=>{
     </button>
 
    </div>
+
   `;
 
-  /* UBICAR SEGUN ESTADO */
+  /* UBICAR */
 
   if(estado === "pendiente"){
 
