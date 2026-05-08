@@ -123,6 +123,29 @@ body::after{
  border-radius:20px;
 }
 
+/* ESTADOS */
+
+.estado-pendiente{
+ background:#eab308;
+ color:black;
+}
+
+.estado-preparando{
+ background:#3b82f6;
+}
+
+.estado-listo{
+ background:#22c55e;
+}
+
+.estado-entregado{
+ background:#64748b;
+}
+
+.estado-cancelado{
+ background:#ef4444;
+}
+
 /* RESPONSIVE */
 
 @media(max-width:900px){
@@ -208,7 +231,7 @@ body::after{
    </p>
 
    <h2 class="text-xl font-bold text-pink-400 mt-2">
-    En Vivo
+    Tiempo Real
    </h2>
 
   </div>
@@ -219,18 +242,18 @@ body::after{
 
 <!-- COLUMNAS -->
 
-<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+<div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
 
- <!-- OPERADOR -->
+ <!-- PENDIENTES -->
 
  <div class="card p-5">
 
   <h2 class="text-3xl font-bold text-yellow-400 mb-5">
-   Pedidos Pendientes
+   Pendientes
   </h2>
 
   <div
-   id="contenedor-pedidos"
+   id="contenedor-pendientes"
    class="scroll-area space-y-5">
   </div>
 
@@ -251,16 +274,31 @@ body::after{
 
  </div>
 
- <!-- DELIVERY -->
+ <!-- LISTOS -->
 
  <div class="card p-5">
 
   <h2 class="text-3xl font-bold text-green-400 mb-5">
-   Delivery
+   Listos
   </h2>
 
   <div
-   id="contenedor-delivery"
+   id="contenedor-listos"
+   class="scroll-area space-y-5">
+  </div>
+
+ </div>
+
+ <!-- HISTORIAL -->
+
+ <div class="card p-5">
+
+  <h2 class="text-3xl font-bold text-gray-300 mb-5">
+   Historial
+  </h2>
+
+  <div
+   id="contenedor-historial"
    class="scroll-area space-y-5">
   </div>
 
@@ -288,7 +326,7 @@ import {
  getDatabase,
  ref,
  onValue,
- remove
+ update
 }
 from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
@@ -320,16 +358,19 @@ initializeApp(firebaseConfig);
 const db =
 getDatabase(app);
 
-/* ELEMENTOS */
+/* CONTENEDORES */
 
-const contenedorPedidos =
-document.getElementById("contenedor-pedidos");
+const pendientesDiv =
+document.getElementById("contenedor-pendientes");
 
-const contenedorCocina =
+const cocinaDiv =
 document.getElementById("contenedor-cocina");
 
-const contenedorDelivery =
-document.getElementById("contenedor-delivery");
+const listosDiv =
+document.getElementById("contenedor-listos");
+
+const historialDiv =
+document.getElementById("contenedor-historial");
 
 const ventasHoy =
 document.getElementById("ventas-hoy");
@@ -343,7 +384,7 @@ document.getElementById("cantidad-delivery");
 const audio =
 document.getElementById("nuevo-pedido");
 
-/* CONTROL SONIDO */
+/* SONIDO */
 
 let totalAnterior = 0;
 
@@ -353,27 +394,24 @@ onValue(ref(db,"pedidos"),(snap)=>{
 
  const data = snap.val();
 
- contenedorPedidos.innerHTML = "";
- contenedorCocina.innerHTML = "";
- contenedorDelivery.innerHTML = "";
+ pendientesDiv.innerHTML = "";
+ cocinaDiv.innerHTML = "";
+ listosDiv.innerHTML = "";
+ historialDiv.innerHTML = "";
 
  let totalGeneral = 0;
  let totalPedidos = 0;
- let totalDeliverys = 0;
 
  if(!data){
 
   ventasHoy.innerText = "Gs. 0";
   cantidadPedidos.innerText = "0";
-  cantidadDelivery.innerText = "0";
 
   return;
  }
 
  const mesas =
  Object.entries(data);
-
- /* SONIDO */
 
  if(mesas.length > totalAnterior){
 
@@ -382,31 +420,74 @@ onValue(ref(db,"pedidos"),(snap)=>{
   totalAnterior = mesas.length;
  }
 
- mesas.forEach(([mesa,pedidos])=>{
+ mesas.forEach(([mesa,pedido])=>{
 
-  let total = 0;
+  /* ESTADO */
+
+  let estado =
+  pedido.estado || "pendiente";
+
+  /* ITEMS */
 
   let itemsHTML = "";
 
-  Object.values(pedidos).forEach(p=>{
+  let total = 0;
 
-   total += p.precio * p.cantidad;
+  Object.entries(pedido)
+  .forEach(([k,p])=>{
 
-   itemsHTML += `
-    <p>
-     ${p.cantidad}x ${p.nombre}
-    </p>
-   `;
+   if(typeof p === "object" && p.nombre){
+
+    total += p.precio * p.cantidad;
+
+    itemsHTML += `
+     <p>
+      ${p.cantidad}x ${p.nombre}
+     </p>
+    `;
+   }
+
   });
 
   totalGeneral += total;
 
   totalPedidos++;
 
-  if(mesa.includes("delivery")){
+  /* TIEMPO */
 
-   totalDeliverys++;
+  const tiempo =
+  "En vivo";
+
+  /* COLOR */
+
+  let estadoClass =
+  "estado-pendiente";
+
+  if(estado === "preparando"){
+
+   estadoClass =
+   "estado-preparando";
   }
+
+  if(estado === "listo"){
+
+   estadoClass =
+   "estado-listo";
+  }
+
+  if(estado === "entregado"){
+
+   estadoClass =
+   "estado-entregado";
+  }
+
+  if(estado === "cancelado"){
+
+   estadoClass =
+   "estado-cancelado";
+  }
+
+  /* CARD */
 
   const card =
   document.createElement("div");
@@ -427,13 +508,13 @@ onValue(ref(db,"pedidos"),(snap)=>{
     </h3>
 
     <span class="
-     bg-yellow-500
+     ${estadoClass}
      px-4 py-1
      rounded-full
      font-bold
      text-sm
     ">
-     Pendiente
+     ${estado.toUpperCase()}
     </span>
 
    </div>
@@ -464,7 +545,7 @@ onValue(ref(db,"pedidos"),(snap)=>{
      text-gray-400
      text-sm
     ">
-     En vivo
+     ${tiempo}
     </span>
 
    </div>
@@ -486,8 +567,9 @@ onValue(ref(db,"pedidos"),(snap)=>{
     </button>
 
     <button
-     class="btn bg-orange-500">
-     WhatsApp
+     class="btn bg-gray-500"
+     id="entregado-${mesa}">
+     Entregado
     </button>
 
     <button
@@ -497,12 +579,34 @@ onValue(ref(db,"pedidos"),(snap)=>{
     </button>
 
    </div>
-
   `;
 
-  contenedorPedidos.appendChild(card);
+  /* UBICAR SEGUN ESTADO */
 
-  /* BOTON COCINA */
+  if(estado === "pendiente"){
+
+   pendientesDiv.appendChild(card);
+  }
+
+  if(estado === "preparando"){
+
+   cocinaDiv.appendChild(card);
+  }
+
+  if(estado === "listo"){
+
+   listosDiv.appendChild(card);
+  }
+
+  if(
+   estado === "entregado" ||
+   estado === "cancelado"
+  ){
+
+   historialDiv.appendChild(card);
+  }
+
+  /* BOTONES */
 
   setTimeout(()=>{
 
@@ -513,13 +617,16 @@ onValue(ref(db,"pedidos"),(snap)=>{
 
     btnCocina.onclick = ()=>{
 
-     contenedorCocina.appendChild(card);
+     update(
+      ref(db,"pedidos/" + mesa),
+      {
+       estado:"preparando"
+      }
+     );
 
     };
 
    }
-
-   /* BOTON LISTO */
 
    const btnListo =
    document.getElementById(`listo-${mesa}`);
@@ -528,13 +635,34 @@ onValue(ref(db,"pedidos"),(snap)=>{
 
     btnListo.onclick = ()=>{
 
-     card.remove();
+     update(
+      ref(db,"pedidos/" + mesa),
+      {
+       estado:"listo"
+      }
+     );
 
     };
 
    }
 
-   /* BOTON CANCELAR */
+   const btnEntregado =
+   document.getElementById(`entregado-${mesa}`);
+
+   if(btnEntregado){
+
+    btnEntregado.onclick = ()=>{
+
+     update(
+      ref(db,"pedidos/" + mesa),
+      {
+       estado:"entregado"
+      }
+     );
+
+    };
+
+   }
 
    const btnCancelar =
    document.getElementById(`cancelar-${mesa}`);
@@ -543,11 +671,12 @@ onValue(ref(db,"pedidos"),(snap)=>{
 
     btnCancelar.onclick = ()=>{
 
-     if(confirm("Cancelar pedido?")){
-
-      remove(ref(db,"pedidos/" + mesa));
-
-     }
+     update(
+      ref(db,"pedidos/" + mesa),
+      {
+       estado:"cancelado"
+      }
+     );
 
     };
 
@@ -562,9 +691,6 @@ onValue(ref(db,"pedidos"),(snap)=>{
 
  cantidadPedidos.innerText =
  totalPedidos;
-
- cantidadDelivery.innerText =
- totalDeliverys;
 
 });
 
