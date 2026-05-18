@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -52,8 +53,6 @@ body::after{
  z-index:-1;
 }
 
-/* CARDS */
-
 .card{
  background:rgba(255,255,255,.06);
  border:1px solid rgba(255,255,255,.08);
@@ -90,8 +89,6 @@ body::after{
 
 }
 
-/* BOTONES */
-
 .btn{
  border:none;
  border-radius:18px;
@@ -105,8 +102,6 @@ body::after{
 .btn:hover{
  transform:scale(1.03);
 }
-
-/* SCROLL */
 
 .scroll-area{
  max-height:78vh;
@@ -122,8 +117,6 @@ body::after{
  background:#475569;
  border-radius:20px;
 }
-
-/* ESTADOS */
 
 .estado-pendiente{
  background:#eab308;
@@ -146,8 +139,6 @@ body::after{
  background:#ef4444;
 }
 
-/* RESPONSIVE */
-
 @media(max-width:900px){
 
  .scroll-area{
@@ -163,8 +154,6 @@ body::after{
 <body>
 
 <div class="p-6">
-
-<!-- HEADER -->
 
 <div class="flex flex-col xl:flex-row justify-between gap-5 mb-8">
 
@@ -240,11 +229,7 @@ body::after{
 
 </div>
 
-<!-- COLUMNAS -->
-
 <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
-
- <!-- PENDIENTES -->
 
  <div class="card p-5">
 
@@ -259,8 +244,6 @@ body::after{
 
  </div>
 
- <!-- COCINA -->
-
  <div class="card p-5">
 
   <h2 class="text-3xl font-bold text-blue-400 mb-5">
@@ -274,8 +257,6 @@ body::after{
 
  </div>
 
- <!-- LISTOS -->
-
  <div class="card p-5">
 
   <h2 class="text-3xl font-bold text-green-400 mb-5">
@@ -288,8 +269,6 @@ body::after{
   </div>
 
  </div>
-
- <!-- HISTORIAL -->
 
  <div class="card p-5">
 
@@ -308,14 +287,10 @@ body::after{
 
 </div>
 
-<!-- SONIDO -->
-
 <audio
  id="nuevo-pedido"
  src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3">
 </audio>
-
-<!-- FIREBASE -->
 
 <script type="module">
 
@@ -329,8 +304,6 @@ import {
  update
 }
 from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
-
-/* FIREBASE */
 
 const firebaseConfig = {
 
@@ -358,8 +331,6 @@ initializeApp(firebaseConfig);
 const db =
 getDatabase(app);
 
-/* CONTENEDORES */
-
 const pendientesDiv =
 document.getElementById("contenedor-pendientes");
 
@@ -384,13 +355,11 @@ document.getElementById("cantidad-delivery");
 const audio =
 document.getElementById("nuevo-pedido");
 
-/* SONIDO */
-
 let totalAnterior = 0;
 
-/* LEER PEDIDOS EN VIVO */
+/* NUEVO SISTEMA */
 
-onValue(ref(db,"pedidos"),(snap)=>{
+onValue(ref(db,"pedidos_cocina"),(snap)=>{
 
  const data = snap.val();
 
@@ -410,32 +379,26 @@ onValue(ref(db,"pedidos"),(snap)=>{
   return;
  }
 
- const mesas =
+ const pedidos =
  Object.entries(data);
 
- /* SONIDO */
-
- if(mesas.length > totalAnterior){
+ if(pedidos.length > totalAnterior){
 
   audio.play();
 
-  totalAnterior = mesas.length;
+  totalAnterior = pedidos.length;
  }
 
- mesas.forEach(([mesa,pedido])=>{
+ pedidos.forEach(([pedidoId,pedido])=>{
 
-  let estado = "pendiente";
-
-  if(pedido.estado){
-
-   estado = pedido.estado;
-  }
+  let estado =
+  pedido.estado || "pendiente";
 
   let itemsHTML = "";
 
   let total = 0;
 
-  Object.entries(pedido)
+  Object.entries(pedido.items || {})
   .forEach(([k,p])=>{
 
    if(
@@ -460,8 +423,6 @@ onValue(ref(db,"pedidos"),(snap)=>{
   totalGeneral += total;
 
   totalPedidos++;
-
-  /* COLOR ESTADO */
 
   let estadoClass =
   "estado-pendiente";
@@ -490,8 +451,6 @@ onValue(ref(db,"pedidos"),(snap)=>{
    "estado-cancelado";
   }
 
-  /* CARD */
-
   const card =
   document.createElement("div");
 
@@ -507,7 +466,7 @@ onValue(ref(db,"pedidos"),(snap)=>{
     <h3 class="
      text-2xl font-bold
     ">
-     ${mesa.replace("mesa_","Mesa ")}
+     Mesa ${pedido.mesa}
     </h3>
 
     <span class="
@@ -559,33 +518,31 @@ onValue(ref(db,"pedidos"),(snap)=>{
 
     <button
      class="btn bg-blue-500"
-     id="cocina-${mesa}">
+     id="cocina-${pedidoId}">
      Cocina
     </button>
 
     <button
      class="btn bg-green-500"
-     id="listo-${mesa}">
+     id="listo-${pedidoId}">
      Listo
     </button>
 
     <button
      class="btn bg-gray-500"
-     id="entregado-${mesa}">
+     id="entregado-${pedidoId}">
      Entregado
     </button>
 
     <button
      class="btn bg-red-500"
-     id="cancelar-${mesa}">
+     id="cancelar-${pedidoId}">
      Cancelar
     </button>
 
    </div>
 
   `;
-
-  /* UBICAR */
 
   if(estado === "pendiente"){
 
@@ -610,19 +567,17 @@ onValue(ref(db,"pedidos"),(snap)=>{
    historialDiv.appendChild(card);
   }
 
-  /* BOTONES */
-
   setTimeout(()=>{
 
    const btnCocina =
-   document.getElementById(`cocina-${mesa}`);
+   document.getElementById(`cocina-${pedidoId}`);
 
    if(btnCocina){
 
     btnCocina.onclick = ()=>{
 
      update(
-      ref(db,"pedidos/" + mesa),
+      ref(db,"pedidos_cocina/" + pedidoId),
       {
        estado:"preparando"
       }
@@ -633,14 +588,14 @@ onValue(ref(db,"pedidos"),(snap)=>{
    }
 
    const btnListo =
-   document.getElementById(`listo-${mesa}`);
+   document.getElementById(`listo-${pedidoId}`);
 
    if(btnListo){
 
     btnListo.onclick = ()=>{
 
      update(
-      ref(db,"pedidos/" + mesa),
+      ref(db,"pedidos_cocina/" + pedidoId),
       {
        estado:"listo"
       }
@@ -651,14 +606,14 @@ onValue(ref(db,"pedidos"),(snap)=>{
    }
 
    const btnEntregado =
-   document.getElementById(`entregado-${mesa}`);
+   document.getElementById(`entregado-${pedidoId}`);
 
    if(btnEntregado){
 
     btnEntregado.onclick = ()=>{
 
      update(
-      ref(db,"pedidos/" + mesa),
+      ref(db,"pedidos_cocina/" + pedidoId),
       {
        estado:"entregado"
       }
@@ -669,14 +624,14 @@ onValue(ref(db,"pedidos"),(snap)=>{
    }
 
    const btnCancelar =
-   document.getElementById(`cancelar-${mesa}`);
+   document.getElementById(`cancelar-${pedidoId}`);
 
    if(btnCancelar){
 
     btnCancelar.onclick = ()=>{
 
      update(
-      ref(db,"pedidos/" + mesa),
+      ref(db,"pedidos_cocina/" + pedidoId),
       {
        estado:"cancelado"
       }
@@ -702,3 +657,4 @@ onValue(ref(db,"pedidos"),(snap)=>{
 
 </body>
 </html>
+```
