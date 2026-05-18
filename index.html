@@ -356,11 +356,25 @@ document.getElementById("nuevo-pedido");
 
 let totalAnterior = 0;
 
+function obtenerFechaOperativa(ts){
+
+ const fecha =
+ new Date(ts);
+
+ if(fecha.getHours() < 4){
+
+  fecha.setDate(
+   fecha.getDate() - 1
+  );
+
+ }
+
+ return fecha.toDateString();
+}
+
 onValue(ref(db,"pedidos_cocina"),(snap)=>{
 
  const data = snap.val();
-
- console.log(data);
 
  pendientesDiv.innerHTML = "";
  cocinaDiv.innerHTML = "";
@@ -369,11 +383,18 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
 
  let totalGeneral = 0;
  let totalPedidos = 0;
+ let totalDeliverys = 0;
+
+ const hoyOperativo =
+ obtenerFechaOperativa(
+  Date.now()
+ );
 
  if(!data){
 
   ventasHoy.innerText = "Gs. 0";
   cantidadPedidos.innerText = "0";
+  cantidadDelivery.innerText = "0";
 
   return;
  }
@@ -423,9 +444,31 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
 
   });
 
-  totalGeneral += total;
+  const fechaPedido =
+  obtenerFechaOperativa(
+   pedido.timestamp || Date.now()
+  );
 
-  totalPedidos++;
+  if(fechaPedido === hoyOperativo){
+
+   totalGeneral += total;
+
+   if(
+    estado !== "entregado" &&
+    estado !== "cancelado"
+   ){
+
+    totalPedidos++;
+   }
+
+   if(
+    pedido.tipoPedido === "delivery"
+   ){
+
+    totalDeliverys++;
+   }
+
+  }
 
   let estadoClass =
   "estado-pendiente";
@@ -469,7 +512,11 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
     <h3 class="
      text-2xl font-bold
     ">
-     Mesa ${pedido.mesa}
+     ${
+      pedido.tipoPedido === "delivery"
+      ? "DELIVERY"
+      : "Mesa " + pedido.mesa
+     }
     </h3>
 
     <span class="
@@ -653,6 +700,9 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
 
  cantidadPedidos.innerText =
  totalPedidos;
+
+ cantidadDelivery.innerText =
+ totalDeliverys;
 
 });
 
