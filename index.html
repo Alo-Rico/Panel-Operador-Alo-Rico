@@ -354,7 +354,7 @@ document.getElementById("cantidad-delivery");
 const audio =
 document.getElementById("nuevo-pedido");
 
-let totalAnterior = 0;
+let pedidosDetectados = {};
 
 function obtenerFechaOperativa(ts){
 
@@ -402,16 +402,23 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
  const pedidos =
  Object.entries(data);
 
- if(pedidos.length > totalAnterior){
+ pedidos.forEach(([pedidoId,pedido])=>{
 
-  try{
+  if(!pedidosDetectados[pedidoId]){
 
-   audio.play();
+   pedidosDetectados[pedidoId] = true;
 
-  }catch(e){}
+   try{
 
-  totalAnterior = pedidos.length;
- }
+    audio.currentTime = 0;
+
+    audio.play();
+
+   }catch(e){}
+
+  }
+
+ });
 
  pedidos.forEach(([pedidoId,pedido])=>{
 
@@ -443,6 +450,9 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
    }
 
   });
+
+  if(itemsHTML.trim() === "")
+   return;
 
   const fechaPedido =
   obtenerFechaOperativa(
