@@ -360,6 +360,8 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
 
  const data = snap.val();
 
+ console.log(data);
+
  pendientesDiv.innerHTML = "";
  cocinaDiv.innerHTML = "";
  listosDiv.innerHTML = "";
@@ -381,7 +383,11 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
 
  if(pedidos.length > totalAnterior){
 
-  audio.play();
+  try{
+
+   audio.play();
+
+  }catch(e){}
 
   totalAnterior = pedidos.length;
  }
