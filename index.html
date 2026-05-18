@@ -579,6 +579,34 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
    </div>
 
    ${
+    pedido.observacion
+    ? `
+    <div class="
+     mt-4
+     bg-yellow-500/20
+     border border-yellow-500/30
+     rounded-2xl
+     p-4
+    ">
+
+     <p class="
+      text-yellow-300
+      font-bold
+      mb-2
+     ">
+      📝 Observaciones
+     </p>
+
+     <p class="text-white">
+      ${pedido.observacion}
+     </p>
+
+    </div>
+    `
+    : ""
+   }
+
+   ${
     pedido.maps
     ? `
     <button
