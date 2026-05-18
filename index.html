@@ -1,392 +1,791 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Panel Operador - Alo Rico</title>
+<title>Alo Rico - Panel Operador</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial, Helvetica, sans-serif;
+ margin:0;
+ padding:0;
+ box-sizing:border-box;
 }
 
 body{
-  background:#f1f1f1;
-  padding:20px;
+ font-family:'Poppins',sans-serif;
+ background:#0f172a;
+ color:white;
+ overflow-x:hidden;
 }
 
-/* ========================= */
-/* TITULO */
-/* ========================= */
+body::before{
+ content:"";
+ position:fixed;
+ inset:0;
 
-.header{
-  background:#ff5722;
-  color:white;
-  padding:20px;
-  border-radius:15px;
-  margin-bottom:20px;
+ background:
+ linear-gradient(rgba(0,0,0,.82),rgba(0,0,0,.90)),
+ url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1600&auto=format&fit=crop');
+
+ background-size:cover;
+ background-position:center;
+
+ z-index:-2;
 }
 
-.header h1{
-  font-size:30px;
+body::after{
+ content:"";
+ position:fixed;
+ inset:0;
+ backdrop-filter:blur(8px);
+ z-index:-1;
 }
 
-/* ========================= */
-/* PEDIDO */
-/* ========================= */
-
-.pedido{
-  background:white;
-  border-radius:18px;
-  padding:20px;
-  margin-bottom:20px;
-  box-shadow:0 3px 12px rgba(0,0,0,0.08);
+.card{
+ background:rgba(255,255,255,.06);
+ border:1px solid rgba(255,255,255,.08);
+ backdrop-filter:blur(12px);
+ border-radius:28px;
+ box-shadow:0 10px 35px rgba(0,0,0,.35);
 }
 
-.pedido-topo{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:15px;
+.pedido-card{
+ background:#1e293b;
+ border-radius:24px;
+ padding:22px;
+ border:1px solid rgba(255,255,255,.08);
+ box-shadow:0 10px 30px rgba(0,0,0,.35);
+ transition:.25s;
+ animation:fadeIn .3s ease;
 }
 
-.numero{
-  font-size:24px;
-  font-weight:bold;
+.pedido-card:hover{
+ transform:translateY(-4px);
 }
 
-.estado{
-  background:#4caf50;
-  color:white;
-  padding:8px 14px;
-  border-radius:30px;
-  font-weight:bold;
+@keyframes fadeIn{
+
+ from{
+  opacity:0;
+  transform:translateY(20px);
+ }
+
+ to{
+  opacity:1;
+  transform:translateY(0);
+ }
+
 }
 
-.info{
-  margin-top:10px;
-  line-height:1.8;
-  font-size:17px;
+.btn{
+ border:none;
+ border-radius:18px;
+ padding:14px;
+ font-weight:700;
+ cursor:pointer;
+ transition:.25s;
+ color:white;
 }
 
-.productos{
-  margin-top:15px;
-  background:#fafafa;
-  padding:15px;
-  border-radius:12px;
+.btn:hover{
+ transform:scale(1.03);
 }
 
-.producto{
-  display:flex;
-  justify-content:space-between;
-  padding:8px 0;
-  border-bottom:1px solid #ddd;
+.scroll-area{
+ max-height:78vh;
+ overflow:auto;
+ padding-right:4px;
 }
 
-.producto:last-child{
-  border-bottom:none;
+.scroll-area::-webkit-scrollbar{
+ width:6px;
 }
 
-/* ========================= */
-/* DELIVERY */
-/* ========================= */
-
-.delivery-box{
-  margin-top:15px;
-  background:#fff7e8;
-  border:2px solid #ff9800;
-  padding:15px;
-  border-radius:12px;
-  line-height:1.8;
+.scroll-area::-webkit-scrollbar-thumb{
+ background:#475569;
+ border-radius:20px;
 }
 
-.delivery-box h3{
-  margin-bottom:10px;
-  color:#ff5722;
+.estado-pendiente{
+ background:#eab308;
+ color:black;
 }
 
-/* ========================= */
-/* TOTAL */
-/* ========================= */
-
-.total{
-  margin-top:20px;
-  background:#222;
-  color:white;
-  padding:18px;
-  border-radius:15px;
+.estado-preparando{
+ background:#3b82f6;
 }
 
-.total-item{
-  display:flex;
-  justify-content:space-between;
-  margin-top:8px;
+.estado-listo{
+ background:#22c55e;
 }
 
-.total-final{
-  margin-top:15px;
-  font-size:28px;
-  font-weight:bold;
-  color:#4caf50;
-  text-align:right;
+.estado-entregado{
+ background:#64748b;
 }
 
-/* ========================= */
-/* BOTONES */
-/* ========================= */
-
-.botones{
-  display:flex;
-  gap:10px;
-  margin-top:20px;
+.estado-cancelado{
+ background:#ef4444;
 }
 
-button{
-  flex:1;
-  border:none;
-  padding:14px;
-  border-radius:12px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-}
+@media(max-width:900px){
 
-.btn-preparando{
-  background:#2196f3;
-  color:white;
-}
+ .scroll-area{
+  max-height:none;
+ }
 
-.btn-listo{
-  background:#4caf50;
-  color:white;
-}
-
-.btn-cancelar{
-  background:#f44336;
-  color:white;
-}
-
-.link-mapa{
-  display:inline-block;
-  margin-top:10px;
-  color:#2196f3;
-  font-weight:bold;
-  text-decoration:none;
-}
-
-.observaciones{
-  margin-top:15px;
-  background:#fff3cd;
-  padding:12px;
-  border-radius:10px;
-  color:#856404;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<!-- ========================= -->
-<!-- HEADER -->
-<!-- ========================= -->
+<div class="p-6">
 
-<div class="header">
-  <h1>🍔 Panel Operador - Alo Rico</h1>
-</div>
+<div class="flex flex-col xl:flex-row justify-between gap-5 mb-8">
 
-<!-- ========================= -->
-<!-- PEDIDO -->
-<!-- ========================= -->
+ <div>
 
-<div class="pedido">
+  <h1 class="text-5xl font-bold text-yellow-400">
+   Alo Rico Panel
+  </h1>
 
-  <div class="pedido-topo">
+  <p class="text-gray-300 mt-2 text-lg">
+   Operador • Cocina • Delivery
+  </p>
 
-    <div class="numero">
-      Pedido #125
-    </div>
+ </div>
 
-    <div class="estado">
-      NUEVO
-    </div>
+ <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
 
-  </div>
+  <div class="card p-5 min-w-[170px]">
 
-  <!-- INFO -->
+   <p class="text-gray-400 text-sm">
+    Ventas Hoy
+   </p>
 
-  <div class="info">
-
-    <div>
-      👤 Cliente: Juan Pérez
-    </div>
-
-    <div>
-      📞 Teléfono: 0991 123456
-    </div>
-
-    <div>
-      🏠 Tipo: DELIVERY
-    </div>
-
-    <div>
-      📍 Dirección: Barrio San Antonio
-    </div>
+   <h2
+    id="ventas-hoy"
+    class="text-2xl font-bold text-green-400 mt-2">
+    Gs. 0
+   </h2>
 
   </div>
 
-  <!-- OBSERVACIONES -->
+  <div class="card p-5 min-w-[170px]">
 
-  <div class="observaciones">
-    📝 Observaciones: sin cebolla y con mucha mayonesa
-  </div>
+   <p class="text-gray-400 text-sm">
+    Pedidos Activos
+   </p>
 
-  <!-- PRODUCTOS -->
-
-  <div class="productos">
-
-    <div class="producto">
-      <span>2x Hamburguesa Completa</span>
-      <span>Gs. 70.000</span>
-    </div>
-
-    <div class="producto">
-      <span>1x Coca Cola 1.5L</span>
-      <span>Gs. 12.000</span>
-    </div>
+   <h2
+    id="cantidad-pedidos"
+    class="text-2xl font-bold text-blue-400 mt-2">
+    0
+   </h2>
 
   </div>
 
-  <!-- DELIVERY -->
+  <div class="card p-5 min-w-[170px]">
 
-  <div class="delivery-box">
+   <p class="text-gray-400 text-sm">
+    Deliverys
+   </p>
 
-    <h3>🚗 Información Delivery</h3>
-
-    <div>
-      📍 Distancia: 4.7 km
-    </div>
-
-    <div>
-      🚗 Costo envío: Gs. 15.000
-    </div>
-
-    <div>
-      ⏱️ Tiempo estimado: 25 min
-    </div>
-
-    <a 
-      class="link-mapa"
-      target="_blank"
-      href="https://maps.google.com/?q=-25.390,-57.350"
-    >
-      VER UBICACIÓN EN MAPA
-    </a>
+   <h2
+    id="cantidad-delivery"
+    class="text-2xl font-bold text-orange-400 mt-2">
+    0
+   </h2>
 
   </div>
 
-  <!-- TOTAL -->
+  <div class="card p-5 min-w-[170px]">
 
-  <div class="total">
+   <p class="text-gray-400 text-sm">
+    Estado
+   </p>
 
-    <div class="total-item">
-      <span>Subtotal:</span>
-      <span>Gs. 82.000</span>
-    </div>
-
-    <div class="total-item">
-      <span>Delivery:</span>
-      <span>Gs. 15.000</span>
-    </div>
-
-    <div class="total-final">
-      TOTAL: Gs. 97.000
-    </div>
+   <h2 class="text-xl font-bold text-pink-400 mt-2">
+    Tiempo Real
+   </h2>
 
   </div>
 
-  <!-- BOTONES -->
-
-  <div class="botones">
-
-    <button class="btn-preparando">
-      PREPARANDO
-    </button>
-
-    <button class="btn-listo">
-      LISTO
-    </button>
-
-    <button class="btn-cancelar">
-      CANCELAR
-    </button>
-
-  </div>
+ </div>
 
 </div>
 
-<!-- ========================= -->
-<!-- SCRIPT EJEMPLO FIREBASE -->
-<!-- ========================= -->
+<div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
 
-<script>
+ <div class="card p-5">
 
-// ======================================
-// EJEMPLO PEDIDO DESDE FIREBASE
-// ======================================
+  <h2 class="text-3xl font-bold text-yellow-400 mb-5">
+   Pendientes
+  </h2>
 
-const pedido = {
+  <div
+   id="contenedor-pendientes"
+   class="scroll-area space-y-5">
+  </div>
 
-  numero: 125,
+ </div>
 
-  cliente: "Juan Pérez",
+ <div class="card p-5">
 
-  telefono: "0991123456",
+  <h2 class="text-3xl font-bold text-blue-400 mb-5">
+   En Preparación
+  </h2>
 
-  direccion: "Barrio San Antonio",
+  <div
+   id="contenedor-cocina"
+   class="scroll-area space-y-5">
+  </div>
 
-  observaciones: "sin cebolla",
+ </div>
 
-  distanciaKm: 4.7,
+ <div class="card p-5">
 
-  costoDelivery: 15000,
+  <h2 class="text-3xl font-bold text-green-400 mb-5">
+   Listos
+  </h2>
 
-  subtotal: 82000,
+  <div
+   id="contenedor-listos"
+   class="scroll-area space-y-5">
+  </div>
 
-  totalFinal: 97000,
+ </div>
 
-  estado: "nuevo",
+ <div class="card p-5">
 
-  ubicacion: {
-    lat: -25.390,
-    lng: -57.350
-  },
+  <h2 class="text-3xl font-bold text-gray-300 mb-5">
+   Historial
+  </h2>
 
-  productos: [
-    {
-      nombre: "Hamburguesa Completa",
-      cantidad: 2,
-      precio: 70000
-    },
-    {
-      nombre: "Coca Cola 1.5L",
-      cantidad: 1,
-      precio: 12000
-    }
-  ]
+  <div
+   id="contenedor-historial"
+   class="scroll-area space-y-5">
+  </div>
+
+ </div>
+
+</div>
+
+</div>
+
+<audio
+ id="nuevo-pedido"
+ src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3">
+</audio>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+
+import {
+ getDatabase,
+ ref,
+ onValue,
+ update
+}
+from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
+
+const firebaseConfig = {
+
+ apiKey: "AIzaSyADGYsqhbCFuKj2fXpontLpND_rtT7Nlno",
+
+ authDomain: "alorico-59754.firebaseapp.com",
+
+ databaseURL:
+ "https://alorico-59754-default-rtdb.firebaseio.com",
+
+ projectId: "alorico-59754",
+
+ storageBucket:
+ "alorico-59754.firebasestorage.app",
+
+ messagingSenderId: "120993494626",
+
+ appId:
+ "1:120993494626:web:9f9cb0ad6fbfbd1abd033b"
 };
 
-// ======================================
-// AQUI PUEDES GENERAR LOS PEDIDOS
-// DINAMICAMENTE CON FIREBASE
-// ======================================
+const app =
+initializeApp(firebaseConfig);
 
-console.log(pedido);
+const db =
+getDatabase(app);
+
+const pendientesDiv =
+document.getElementById("contenedor-pendientes");
+
+const cocinaDiv =
+document.getElementById("contenedor-cocina");
+
+const listosDiv =
+document.getElementById("contenedor-listos");
+
+const historialDiv =
+document.getElementById("contenedor-historial");
+
+const ventasHoy =
+document.getElementById("ventas-hoy");
+
+const cantidadPedidos =
+document.getElementById("cantidad-pedidos");
+
+const cantidadDelivery =
+document.getElementById("cantidad-delivery");
+
+const audio =
+document.getElementById("nuevo-pedido");
+
+let pedidosDetectados = {};
+
+function obtenerFechaOperativa(ts){
+
+ const fecha =
+ new Date(ts);
+
+ if(fecha.getHours() < 4){
+
+  fecha.setDate(
+   fecha.getDate() - 1
+  );
+
+ }
+
+ return fecha.toDateString();
+}
+
+window.abrirMaps = (url)=>{
+
+ window.open(
+  url,
+  "_blank"
+ );
+
+};
+
+onValue(ref(db,"pedidos_cocina"),(snap)=>{
+
+ const data = snap.val();
+
+ pendientesDiv.innerHTML = "";
+ cocinaDiv.innerHTML = "";
+ listosDiv.innerHTML = "";
+ historialDiv.innerHTML = "";
+
+ let totalGeneral = 0;
+ let totalPedidos = 0;
+ let totalDeliverys = 0;
+
+ const hoyOperativo =
+ obtenerFechaOperativa(
+  Date.now()
+ );
+
+ if(!data){
+
+  ventasHoy.innerText = "Gs. 0";
+  cantidadPedidos.innerText = "0";
+  cantidadDelivery.innerText = "0";
+
+  return;
+ }
+
+ const pedidos =
+ Object.entries(data);
+
+ pedidos.forEach(([pedidoId,pedido])=>{
+
+  if(!pedidosDetectados[pedidoId]){
+
+   pedidosDetectados[pedidoId] = true;
+
+   try{
+
+    audio.currentTime = 0;
+
+    audio.play();
+
+   }catch(e){}
+
+  }
+
+ });
+
+ pedidos.forEach(([pedidoId,pedido])=>{
+
+  let estado =
+  pedido.estado || "pendiente";
+
+  let itemsHTML = "";
+
+  let total = 0;
+
+  Object.entries(pedido.items || {})
+  .forEach(([k,p])=>{
+
+   if(
+    typeof p === "object" &&
+    p !== null &&
+    p.nombre
+   ){
+
+    total +=
+    Number(p.precio) *
+    Number(p.cantidad);
+
+    itemsHTML += `
+     <p>
+      ${p.cantidad}x ${p.nombre}
+     </p>
+    `;
+   }
+
+  });
+
+  if(itemsHTML.trim() === "")
+   return;
+
+  const fechaPedido =
+  obtenerFechaOperativa(
+   pedido.timestamp || Date.now()
+  );
+
+  if(fechaPedido === hoyOperativo){
+
+   totalGeneral += total;
+
+   if(
+    estado !== "entregado" &&
+    estado !== "cancelado"
+   ){
+
+    totalPedidos++;
+   }
+
+   if(
+    pedido.tipoPedido === "delivery"
+   ){
+
+    totalDeliverys++;
+   }
+
+  }
+
+  let estadoClass =
+  "estado-pendiente";
+
+  if(estado === "preparando"){
+
+   estadoClass =
+   "estado-preparando";
+  }
+
+  if(estado === "listo"){
+
+   estadoClass =
+   "estado-listo";
+  }
+
+  if(estado === "entregado"){
+
+   estadoClass =
+   "estado-entregado";
+  }
+
+  if(estado === "cancelado"){
+
+   estadoClass =
+   "estado-cancelado";
+  }
+
+  const card =
+  document.createElement("div");
+
+  card.className =
+  "pedido-card";
+
+  card.innerHTML = `
+
+   <div class="
+    flex justify-between items-center mb-4
+   ">
+
+    <h3 class="
+     text-2xl font-bold
+    ">
+     ${
+      pedido.tipoPedido === "delivery"
+      ? "DELIVERY"
+      : "Mesa " + pedido.mesa
+     }
+    </h3>
+
+    <span class="
+     ${estadoClass}
+     px-4 py-1
+     rounded-full
+     font-bold
+     text-sm
+    ">
+     ${estado.toUpperCase()}
+    </span>
+
+   </div>
+
+   ${
+    pedido.nombre
+    ? `
+    <p class="mb-2 text-cyan-300">
+     👤 ${pedido.nombre}
+    </p>
+    `
+    : ""
+   }
+
+   ${
+    pedido.telefono
+    ? `
+    <p class="mb-4 text-green-300">
+     📞 ${pedido.telefono}
+    </p>
+    `
+    : ""
+   }
+
+   <div class="
+    space-y-2
+    text-lg
+    text-gray-200
+   ">
+    ${itemsHTML}
+   </div>
+
+   ${
+    pedido.observacion
+    ? `
+    <div class="
+     mt-4
+     bg-yellow-500/20
+     border border-yellow-500/30
+     rounded-2xl
+     p-4
+    ">
+
+     <p class="
+      text-yellow-300
+      font-bold
+      mb-2
+     ">
+      📝 Observaciones
+     </p>
+
+     <p class="text-white">
+      ${pedido.observacion}
+     </p>
+
+    </div>
+    `
+    : ""
+   }
+
+   ${
+    pedido.maps
+    ? `
+    <button
+     onclick="abrirMaps('${pedido.maps}')"
+     class="
+      w-full
+      mt-5
+      bg-cyan-500
+      py-3
+      rounded-2xl
+      font-bold
+     ">
+
+     📍 VER UBICACIÓN
+
+    </button>
+    `
+    : ""
+   }
+
+   <div class="
+    flex justify-between
+    items-center
+    mt-5 mb-5
+   ">
+
+    <span class="
+     text-green-400
+     font-bold
+     text-2xl
+    ">
+     Gs. ${total.toLocaleString()}
+    </span>
+
+   </div>
+
+   <div class="
+    grid grid-cols-2 gap-3
+   ">
+
+    <button
+     class="btn bg-blue-500"
+     id="cocina-${pedidoId}">
+     Enviar a Cocina
+    </button>
+
+    <button
+     class="btn bg-green-500"
+     id="listo-${pedidoId}">
+     Listo
+    </button>
+
+    <button
+     class="btn bg-gray-500"
+     id="entregado-${pedidoId}">
+     Entregado
+    </button>
+
+    <button
+     class="btn bg-red-500"
+     id="cancelar-${pedidoId}">
+     Cancelar
+    </button>
+
+   </div>
+
+  `;
+
+  if(estado === "pendiente"){
+
+   pendientesDiv.appendChild(card);
+  }
+
+  if(estado === "preparando"){
+
+   cocinaDiv.appendChild(card);
+  }
+
+  if(estado === "listo"){
+
+   listosDiv.appendChild(card);
+  }
+
+  if(
+   estado === "entregado" ||
+   estado === "cancelado"
+  ){
+
+   historialDiv.appendChild(card);
+  }
+
+  setTimeout(()=>{
+
+   const btnCocina =
+   document.getElementById(`cocina-${pedidoId}`);
+
+   if(btnCocina){
+
+    btnCocina.onclick = ()=>{
+
+     update(
+      ref(db,"pedidos_cocina/" + pedidoId),
+      {
+       estado:"preparando"
+      }
+     );
+
+    };
+
+   }
+
+   const btnListo =
+   document.getElementById(`listo-${pedidoId}`);
+
+   if(btnListo){
+
+    btnListo.onclick = ()=>{
+
+     update(
+      ref(db,"pedidos_cocina/" + pedidoId),
+      {
+       estado:"listo"
+      }
+     );
+
+    };
+
+   }
+
+   const btnEntregado =
+   document.getElementById(`entregado-${pedidoId}`);
+
+   if(btnEntregado){
+
+    btnEntregado.onclick = ()=>{
+
+     update(
+      ref(db,"pedidos_cocina/" + pedidoId),
+      {
+       estado:"entregado"
+      }
+     );
+
+    };
+
+   }
+
+   const btnCancelar =
+   document.getElementById(`cancelar-${pedidoId}`);
+
+   if(btnCancelar){
+
+    btnCancelar.onclick = ()=>{
+
+     update(
+      ref(db,"pedidos_cocina/" + pedidoId),
+      {
+       estado:"cancelado"
+      }
+     );
+
+    };
+
+   }
+
+  },100);
+
+ });
+
+ ventasHoy.innerText =
+ "Gs. " + totalGeneral.toLocaleString();
+
+ cantidadPedidos.innerText =
+ totalPedidos;
+
+ cantidadDelivery.innerText =
+ totalDeliverys;
+
+});
 
 </script>
 
