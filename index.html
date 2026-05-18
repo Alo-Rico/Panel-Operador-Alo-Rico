@@ -138,10 +138,58 @@ body::after{
  background:#ef4444;
 }
 
+#modal-maps{
+ display:none;
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.75);
+ justify-content:center;
+ align-items:center;
+ z-index:99999;
+}
+
+.modal-content{
+ width:95%;
+ max-width:700px;
+ background:#111827;
+ border-radius:28px;
+ overflow:hidden;
+ border:1px solid rgba(255,255,255,.08);
+}
+
+.modal-header{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:20px;
+ background:#1e293b;
+}
+
+.modal-close{
+ background:#ef4444;
+ border:none;
+ color:white;
+ width:40px;
+ height:40px;
+ border-radius:50%;
+ cursor:pointer;
+ font-size:18px;
+}
+
+iframe{
+ width:100%;
+ height:500px;
+ border:none;
+}
+
 @media(max-width:900px){
 
  .scroll-area{
   max-height:none;
+ }
+
+ iframe{
+  height:400px;
  }
 
 }
@@ -286,6 +334,30 @@ body::after{
 
 </div>
 
+<div id="modal-maps">
+
+ <div class="modal-content">
+
+  <div class="modal-header">
+
+   <h2 class="text-2xl font-bold text-cyan-400">
+    Ubicación Delivery
+   </h2>
+
+   <button
+    class="modal-close"
+    onclick="cerrarMaps()">
+    ✕
+   </button>
+
+  </div>
+
+  <iframe id="maps-frame"></iframe>
+
+ </div>
+
+</div>
+
 <audio
  id="nuevo-pedido"
  src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3">
@@ -371,6 +443,21 @@ function obtenerFechaOperativa(ts){
 
  return fecha.toDateString();
 }
+
+window.cerrarMaps = ()=>{
+
+ document.getElementById("modal-maps")
+ .style.display = "none";
+};
+
+window.abrirMaps = (url)=>{
+
+ document.getElementById("maps-frame")
+ .src = url;
+
+ document.getElementById("modal-maps")
+ .style.display = "flex";
+};
 
 onValue(ref(db,"pedidos_cocina"),(snap)=>{
 
@@ -541,6 +628,26 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
 
    </div>
 
+   ${
+    pedido.nombre
+    ? `
+    <p class="mb-2 text-cyan-300">
+     👤 ${pedido.nombre}
+    </p>
+    `
+    : ""
+   }
+
+   ${
+    pedido.telefono
+    ? `
+    <p class="mb-4 text-green-300">
+     📞 ${pedido.telefono}
+    </p>
+    `
+    : ""
+   }
+
    <div class="
     space-y-2
     text-lg
@@ -548,6 +655,27 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
    ">
     ${itemsHTML}
    </div>
+
+   ${
+    pedido.maps
+    ? `
+    <button
+     onclick="abrirMaps('${pedido.maps}')"
+     class="
+      w-full
+      mt-5
+      bg-cyan-500
+      py-3
+      rounded-2xl
+      font-bold
+     ">
+
+     📍 VER UBICACIÓN
+
+    </button>
+    `
+    : ""
+   }
 
    <div class="
     flex justify-between
@@ -561,13 +689,6 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
      text-2xl
     ">
      Gs. ${total.toLocaleString()}
-    </span>
-
-    <span class="
-     text-gray-400
-     text-sm
-    ">
-     En vivo
     </span>
 
    </div>
