@@ -53,35 +53,21 @@ body::after{
 }
 
 .card{
-
  background:rgba(255,255,255,.06);
-
  border:1px solid rgba(255,255,255,.08);
-
  backdrop-filter:blur(12px);
-
  border-radius:28px;
-
  box-shadow:0 10px 35px rgba(0,0,0,.35);
-
 }
 
 .pedido-card{
-
  background:#1e293b;
-
  border-radius:20px;
-
  padding:14px;
-
  border:1px solid rgba(255,255,255,.08);
-
  box-shadow:0 10px 30px rgba(0,0,0,.35);
-
  transition:.25s;
-
  animation:fadeIn .3s ease;
-
 }
 
 @keyframes fadeIn{
@@ -99,33 +85,20 @@ body::after{
 }
 
 .btn{
-
  border:none;
-
  border-radius:18px;
-
  padding:12px;
-
  font-weight:700;
-
  cursor:pointer;
-
  transition:.25s;
-
  color:white;
-
 }
 
 .scroll-area{
-
  max-height:calc(100vh - 160px);
-
  overflow-y:auto;
-
  overflow-x:hidden;
-
  padding-right:4px;
-
 }
 
 .estado-pendiente{
@@ -345,7 +318,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-
 const db = getDatabase(app);
 
 const pendientesDiv =
@@ -370,9 +342,7 @@ const cantidadDelivery =
 document.getElementById("cantidad-delivery");
 
 window.abrirMaps = (url)=>{
-
  window.open(url,"_blank");
-
 };
 
 onValue(ref(db,"pedidos_cocina"),(snap)=>{
@@ -393,8 +363,6 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
 
  Object.entries(data).forEach(([pedidoId,pedido])=>{
 
-  /* DIA OPERATIVO 4AM */
-
   const ahora = new Date();
 
   const fechaPedido =
@@ -407,11 +375,7 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
    const f = new Date(fecha);
 
    if(f.getHours() < 4){
-
-    f.setDate(
-     f.getDate() - 1
-    );
-
+    f.setDate(f.getDate() - 1);
    }
 
    return f.toDateString();
@@ -679,23 +643,45 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
    mt-4
   ">
 
-   <button
-    class="btn bg-blue-500"
-    id="cocina-${pedidoId}">
-    Enviar a Cocina
-   </button>
+   ${
+    estado === "pendiente"
+    ? `
+    <button
+     class="btn bg-blue-500"
+     id="cocina-${pedidoId}">
+     Enviar a Cocina
+    </button>
+    `
+    : ""
+   }
 
-   <button
-    class="btn bg-green-500"
-    id="listo-${pedidoId}">
-    Listo
-   </button>
+   ${
+    estado === "preparando"
+    ? `
+    <button
+     class="btn bg-green-500"
+     id="listo-${pedidoId}">
+     Listo
+    </button>
+    `
+    : ""
+   }
 
-   <button
-    class="btn bg-gray-500"
-    id="entregado-${pedidoId}">
-    Entregado
-   </button>
+   ${
+    estado === "listo"
+    ? `
+    <button
+     class="btn bg-gray-500"
+     id="entregado-${pedidoId}">
+     ${
+      pedido.tipoPedido === "delivery"
+      ? "Entregar a Delivery"
+      : "Entregar Mesa " + pedido.mesa
+     }
+    </button>
+    `
+    : ""
+   }
 
    <button
     class="btn bg-red-500"
