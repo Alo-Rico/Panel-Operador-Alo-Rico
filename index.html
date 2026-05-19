@@ -5,12 +5,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Alo Rico - Panel Operador</title>
+
 <script src="https://cdn.tailwindcss.com"></script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
+
 *{
  margin:0;
  padding:0;
@@ -28,11 +32,14 @@ body::before{
  content:"";
  position:fixed;
  inset:0;
+
  background:
  linear-gradient(rgba(0,0,0,.82),rgba(0,0,0,.90)),
  url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1600&auto=format&fit=crop');
+
  background-size:cover;
  background-position:center;
+
  z-index:-2;
 }
 
@@ -45,48 +52,79 @@ body::after{
 }
 
 .card{
+
  background:rgba(255,255,255,.06);
+
  border:1px solid rgba(255,255,255,.08);
+
  backdrop-filter:blur(12px);
+
  border-radius:28px;
+
  box-shadow:0 10px 35px rgba(0,0,0,.35);
+
 }
 
 .pedido-card{
+
  background:#1e293b;
- border-radius:24px;
- padding:22px;
+
+ border-radius:20px;
+
+ padding:14px;
+
  border:1px solid rgba(255,255,255,.08);
+
  box-shadow:0 10px 30px rgba(0,0,0,.35);
+
  transition:.25s;
+
  animation:fadeIn .3s ease;
+
 }
 
 @keyframes fadeIn{
+
  from{
   opacity:0;
   transform:translateY(20px);
  }
+
  to{
   opacity:1;
   transform:translateY(0);
  }
+
 }
 
 .btn{
+
  border:none;
+
  border-radius:18px;
- padding:14px;
+
+ padding:12px;
+
  font-weight:700;
+
  cursor:pointer;
+
  transition:.25s;
+
  color:white;
+
 }
 
 .scroll-area{
- max-height:78vh;
- overflow:auto;
+
+ max-height:calc(100vh - 160px);
+
+ overflow-y:auto;
+
+ overflow-x:hidden;
+
  padding-right:4px;
+
 }
 
 .estado-pendiente{
@@ -109,79 +147,178 @@ body::after{
 .estado-cancelado{
  background:#ef4444;
 }
+
+/* RESPONSIVE MONITOR BAJO */
+
+@media(max-height:800px){
+
+ h1{
+  font-size:38px !important;
+ }
+
+ h2{
+  font-size:24px !important;
+ }
+
+ .pedido-card{
+  padding:12px;
+ }
+
+ .pedido-card h3{
+  font-size:22px !important;
+ }
+
+ .pedido-card p{
+  font-size:13px !important;
+ }
+
+ .btn{
+  padding:10px;
+  font-size:13px;
+ }
+
+ .scroll-area{
+  max-height:calc(100vh - 130px);
+ }
+
+ .card{
+  padding:14px !important;
+ }
+
+}
+
+/* SCROLL BONITO */
+
+.scroll-area::-webkit-scrollbar{
+ width:8px;
+}
+
+.scroll-area::-webkit-scrollbar-thumb{
+ background:#334155;
+ border-radius:10px;
+}
+
+.scroll-area::-webkit-scrollbar-track{
+ background:transparent;
+}
+
 </style>
 
 </head>
+
 <body>
 
-<div class="p-6">
+<div class="p-4">
 
-<div class="flex flex-col xl:flex-row justify-between gap-5 mb-8">
+<div class="flex flex-col xl:flex-row justify-between gap-4 mb-6">
 
  <div>
+
   <h1 class="text-5xl font-bold text-yellow-400">
    Alo Rico Panel
   </h1>
 
-  <p class="text-gray-300 mt-2 text-lg">
+  <p class="text-gray-300 mt-1 text-lg">
    Operador • Cocina • Delivery
   </p>
+
  </div>
 
- <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+ <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
 
-  <div class="card p-5 min-w-[170px]">
-   <p class="text-gray-400 text-sm">Ventas Hoy</p>
-   <h2 id="ventas-hoy" class="text-2xl font-bold text-green-400 mt-2">
+  <div class="card p-4 min-w-[150px]">
+
+   <p class="text-gray-400 text-sm">
+    Ventas Hoy
+   </p>
+
+   <h2 id="ventas-hoy"
+   class="text-2xl font-bold text-green-400 mt-2">
     Gs. 0
    </h2>
+
   </div>
 
-  <div class="card p-5 min-w-[170px]">
-   <p class="text-gray-400 text-sm">Pedidos Activos</p>
-   <h2 id="cantidad-pedidos" class="text-2xl font-bold text-blue-400 mt-2">
+  <div class="card p-4 min-w-[150px]">
+
+   <p class="text-gray-400 text-sm">
+    Pedidos Activos
+   </p>
+
+   <h2 id="cantidad-pedidos"
+   class="text-2xl font-bold text-blue-400 mt-2">
     0
    </h2>
+
   </div>
 
-  <div class="card p-5 min-w-[170px]">
-   <p class="text-gray-400 text-sm">Deliverys</p>
-   <h2 id="cantidad-delivery" class="text-2xl font-bold text-orange-400 mt-2">
+  <div class="card p-4 min-w-[150px]">
+
+   <p class="text-gray-400 text-sm">
+    Deliverys
+   </p>
+
+   <h2 id="cantidad-delivery"
+   class="text-2xl font-bold text-orange-400 mt-2">
     0
    </h2>
+
   </div>
 
  </div>
+
 </div>
 
-<div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
+<div class="grid grid-cols-1 xl:grid-cols-4 gap-4">
 
- <div class="card p-5">
-  <h2 class="text-3xl font-bold text-yellow-400 mb-5">Pendientes</h2>
-  <div id="contenedor-pendientes" class="scroll-area space-y-5"></div>
+ <div class="card p-4">
+
+  <h2 class="text-3xl font-bold text-yellow-400 mb-4">
+   Pendientes
+  </h2>
+
+  <div id="contenedor-pendientes"
+  class="scroll-area space-y-4"></div>
+
  </div>
 
- <div class="card p-5">
-  <h2 class="text-3xl font-bold text-blue-400 mb-5">En Preparación</h2>
-  <div id="contenedor-cocina" class="scroll-area space-y-5"></div>
+ <div class="card p-4">
+
+  <h2 class="text-3xl font-bold text-blue-400 mb-4">
+   En Preparación
+  </h2>
+
+  <div id="contenedor-cocina"
+  class="scroll-area space-y-4"></div>
+
  </div>
 
- <div class="card p-5">
-  <h2 class="text-3xl font-bold text-green-400 mb-5">Listos</h2>
-  <div id="contenedor-listos" class="scroll-area space-y-5"></div>
+ <div class="card p-4">
+
+  <h2 class="text-3xl font-bold text-green-400 mb-4">
+   Listos
+  </h2>
+
+  <div id="contenedor-listos"
+  class="scroll-area space-y-4"></div>
+
  </div>
 
- <div class="card p-5">
-  <h2 class="text-3xl font-bold text-gray-300 mb-5">
+ <div class="card p-4">
+
+  <h2 class="text-3xl font-bold text-gray-300 mb-4">
    Historial Delivery
   </h2>
 
   <div id="historial-delivery"></div>
 
-  <div id="contenedor-historial" class="scroll-area space-y-5 mt-5"></div>
+  <div id="contenedor-historial"
+  class="scroll-area space-y-4 mt-4"></div>
+
  </div>
 
 </div>
+
 </div>
 
 <script type="module">
@@ -198,25 +335,47 @@ import {
 from "https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js";
 
 const firebaseConfig = {
+
  apiKey: "AIzaSyADGYsqhbCFuKj2fXpontLpND_rtT7Nlno",
+
  authDomain: "alorico-59754.firebaseapp.com",
- databaseURL:"https://alorico-59754-default-rtdb.firebaseio.com",
+
+ databaseURL:
+ "https://alorico-59754-default-rtdb.firebaseio.com",
+
  projectId: "alorico-59754"
+
 };
 
 const app = initializeApp(firebaseConfig);
+
 const db = getDatabase(app);
 
-const pendientesDiv = document.getElementById("contenedor-pendientes");
-const cocinaDiv = document.getElementById("contenedor-cocina");
-const listosDiv = document.getElementById("contenedor-listos");
-const historialDiv = document.getElementById("contenedor-historial");
-const ventasHoy = document.getElementById("ventas-hoy");
-const cantidadPedidos = document.getElementById("cantidad-pedidos");
-const cantidadDelivery = document.getElementById("cantidad-delivery");
+const pendientesDiv =
+document.getElementById("contenedor-pendientes");
+
+const cocinaDiv =
+document.getElementById("contenedor-cocina");
+
+const listosDiv =
+document.getElementById("contenedor-listos");
+
+const historialDiv =
+document.getElementById("contenedor-historial");
+
+const ventasHoy =
+document.getElementById("ventas-hoy");
+
+const cantidadPedidos =
+document.getElementById("cantidad-pedidos");
+
+const cantidadDelivery =
+document.getElementById("cantidad-delivery");
 
 window.abrirMaps = (url)=>{
+
  window.open(url,"_blank");
+
 };
 
 onValue(ref(db,"pedidos_cocina"),(snap)=>{
@@ -237,12 +396,18 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
 
  Object.entries(data).forEach(([pedidoId,pedido])=>{
 
-  let estado = pedido.estado || "pendiente";
-  let total = Number(pedido.total || 0);
+  let estado =
+  pedido.estado || "pendiente";
+
+  let total =
+  Number(pedido.total || 0);
 
   totalGeneral += total;
 
-  if(estado !== "entregado" && estado !== "cancelado"){
+  if(
+   estado !== "entregado" &&
+   estado !== "cancelado"
+  ){
    totalPedidos++;
   }
 
@@ -252,14 +417,26 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
 
    historialDeliveryHTML += `
 
-   <div class="mt-3 bg-orange-500/10 border border-orange-500/20 rounded-2xl p-3">
+   <div class="
+    mt-3
+    bg-orange-500/10
+    border border-orange-500/20
+    rounded-2xl
+    p-3
+   ">
 
-    <p class="font-bold text-orange-300">
+    <p class="
+     font-bold
+     text-orange-300
+    ">
      ${pedido.nombre || "Cliente"}
     </p>
 
     <p class="text-white mt-1">
-     Delivery: Gs. ${Number(pedido.deliveryCosto || 0).toLocaleString()}
+     Delivery:
+     Gs. ${Number(
+      pedido.deliveryCosto || 0
+     ).toLocaleString()}
     </p>
 
    </div>
@@ -267,130 +444,255 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
    `;
   }
 
-  const card = document.createElement("div");
+  const card =
+  document.createElement("div");
+
   card.className = "pedido-card";
 
   card.innerHTML = `
 
-  <div class="flex justify-between items-start mb-5">
+  <div class="
+   flex justify-between
+   items-start
+   mb-4
+  ">
 
    <div>
 
-    <h3 class="text-3xl font-bold">
-     ${pedido.tipoPedido === "delivery" ? "DELIVERY" : "Mesa " + pedido.mesa}
+    <h3 class="
+     text-3xl
+     font-bold
+    ">
+     ${
+      pedido.tipoPedido === "delivery"
+      ? "DELIVERY"
+      : "Mesa " + pedido.mesa
+     }
     </h3>
 
    </div>
 
-   <span class="px-4 py-1 rounded-full font-bold text-sm estado-${estado}">
+   <span class="
+    px-4 py-1
+    rounded-full
+    font-bold
+    text-sm
+    estado-${estado}
+   ">
     ${estado.toUpperCase()}
    </span>
 
   </div>
 
-  <div class="bg-white/5 rounded-2xl p-4 border border-white/5">
+  <div class="
+   bg-white/5
+   rounded-2xl
+   p-3
+   border border-white/5
+  ">
 
-   <p class="text-cyan-300 font-bold text-lg">
+   <p class="
+    text-cyan-300
+    font-bold
+    text-lg
+   ">
     👤 ${pedido.nombre || "Sin Nombre"}
    </p>
 
-   <p class="text-green-300 mt-2 font-semibold">
+   <p class="
+    text-green-300
+    mt-2
+    font-semibold
+   ">
     📞 ${pedido.telefono || ""}
    </p>
 
-   ${pedido.observacion ? `
-   <div class="mt-4 bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-3 text-yellow-200">
-    📝 ${pedido.observacion}
-   </div>
-   ` : ""}
+   ${
+    pedido.observacion
+    ? `
+    <div class="
+     mt-4
+     bg-yellow-500/10
+     border border-yellow-500/20
+     rounded-xl
+     p-3
+     text-yellow-200
+    ">
+     📝 ${pedido.observacion}
+    </div>
+    `
+    : ""
+   }
 
   </div>
 
-  <div class="mt-5 bg-black/20 rounded-2xl p-4 border border-white/5">
+  <div class="
+   mt-4
+   bg-black/20
+   rounded-2xl
+   p-3
+   border border-white/5
+  ">
 
-   <h4 class="text-lg font-bold text-white mb-4">
+   <h4 class="
+    text-lg
+    font-bold
+    text-white
+    mb-3
+   ">
     🛒 Pedido
    </h4>
 
-   ${Object.values(pedido.items || {}).map(p=>`
+   ${Object.values(
+    pedido.items || {}
+   ).map(p=>`
 
-   <div class="flex justify-between items-center py-2 border-b border-white/5">
+   <div class="
+    flex justify-between
+    items-center
+    py-2
+    border-b
+    border-white/5
+   ">
 
     <div>
 
-     <p class="text-white font-medium">
+     <p class="
+      text-white
+      font-medium
+     ">
       ${p.cantidad}x ${p.nombre}
      </p>
 
-     ${p.tipo ? `
-     <p class="text-xs text-yellow-300 mt-1">
-      ${p.tipo}
-     </p>
-     ` : ""}
-
     </div>
 
-    <p class="text-green-400 font-bold">
-     Gs. ${Number(p.precio * p.cantidad).toLocaleString()}
+    <p class="
+     text-green-400
+     font-bold
+    ">
+     Gs. ${Number(
+      p.precio * p.cantidad
+     ).toLocaleString()}
     </p>
 
    </div>
 
    `).join("")}
 
-   ${pedido.tipoPedido === "delivery" ? `
+   ${
+    pedido.tipoPedido === "delivery"
+    ? `
 
-   <div class="flex justify-between items-center mt-4 pt-4 border-t border-orange-500/20">
+    <div class="
+     flex justify-between
+     items-center
+     mt-4
+     pt-4
+     border-t
+     border-orange-500/20
+    ">
 
-    <p class="text-orange-300 font-semibold">
-     🚗 Delivery
-    </p>
+     <p class="
+      text-orange-300
+      font-semibold
+     ">
+      🚗 Delivery
+     </p>
 
-    <p class="text-orange-300 font-bold">
-     Gs. ${Number(pedido.deliveryCosto || 0).toLocaleString()}
-    </p>
+     <p class="
+      text-orange-300
+      font-bold
+     ">
+      Gs. ${Number(
+       pedido.deliveryCosto || 0
+      ).toLocaleString()}
+     </p>
 
-   </div>
+    </div>
 
-   ` : ""}
+    `
+    : ""
+   }
 
-   <div class="flex justify-between items-center mt-5 pt-4 border-t border-white/10">
+   <div class="
+    flex justify-between
+    items-center
+    mt-4
+    pt-4
+    border-t
+    border-white/10
+   ">
 
-    <p class="text-xl font-bold text-white">
+    <p class="
+     text-xl
+     font-bold
+     text-white
+    ">
      TOTAL
     </p>
 
-    <p class="text-2xl font-bold text-green-400">
-     Gs. ${Number(total).toLocaleString()}
+    <p class="
+     text-2xl
+     font-bold
+     text-green-400
+    ">
+     Gs. ${Number(
+      total
+     ).toLocaleString()}
     </p>
 
    </div>
 
   </div>
 
-  ${pedido.maps ? `
-  <button
-   onclick="abrirMaps('${pedido.maps}')"
-   class="w-full mt-5 bg-cyan-500 py-3 rounded-2xl font-bold">
-   📍 VER UBICACIÓN
-  </button>
-  ` : ""}
+  ${
+   pedido.maps
+   ? `
+   <button
+    onclick="abrirMaps('${pedido.maps}')"
+    class="
+     w-full
+     mt-4
+     bg-cyan-500
+     py-3
+     rounded-2xl
+     font-bold
+    ">
 
-  <div class="grid grid-cols-2 gap-3 mt-5">
+    📍 VER UBICACIÓN
 
-   <button class="btn bg-blue-500" id="cocina-${pedidoId}">
+   </button>
+   `
+   : ""
+  }
+
+  <div class="
+   grid grid-cols-2
+   gap-3
+   mt-4
+  ">
+
+   <button
+    class="btn bg-blue-500"
+    id="cocina-${pedidoId}">
     Enviar a Cocina
    </button>
 
-   <button class="btn bg-green-500" id="listo-${pedidoId}">
+   <button
+    class="btn bg-green-500"
+    id="listo-${pedidoId}">
     Listo
    </button>
 
-   <button class="btn bg-gray-500" id="entregado-${pedidoId}">
+   <button
+    class="btn bg-gray-500"
+    id="entregado-${pedidoId}">
     Entregado
    </button>
 
-   <button class="btn bg-red-500" id="cancelar-${pedidoId}">
+   <button
+    class="btn bg-red-500"
+    id="cancelar-${pedidoId}">
     Cancelar
    </button>
 
@@ -410,61 +712,131 @@ onValue(ref(db,"pedidos_cocina"),(snap)=>{
    listosDiv.appendChild(card);
   }
 
-  if(estado === "entregado" || estado === "cancelado"){
+  if(
+   estado === "entregado" ||
+   estado === "cancelado"
+  ){
    historialDiv.appendChild(card);
   }
 
   setTimeout(()=>{
 
-   const btnCocina = document.getElementById(`cocina-${pedidoId}`);
-   const btnListo = document.getElementById(`listo-${pedidoId}`);
-   const btnEntregado = document.getElementById(`entregado-${pedidoId}`);
-   const btnCancelar = document.getElementById(`cancelar-${pedidoId}`);
+   const btnCocina =
+   document.getElementById(
+    `cocina-${pedidoId}`
+   );
+
+   const btnListo =
+   document.getElementById(
+    `listo-${pedidoId}`
+   );
+
+   const btnEntregado =
+   document.getElementById(
+    `entregado-${pedidoId}`
+   );
+
+   const btnCancelar =
+   document.getElementById(
+    `cancelar-${pedidoId}`
+   );
 
    if(btnCocina){
+
     btnCocina.onclick = ()=>{
-     update(ref(db,"pedidos_cocina/" + pedidoId),{
-      estado:"preparando"
-     });
+
+     update(
+      ref(
+       db,
+       "pedidos_cocina/" + pedidoId
+      ),
+      {
+       estado:"preparando"
+      }
+     );
+
     };
+
    }
 
    if(btnListo){
+
     btnListo.onclick = ()=>{
-     update(ref(db,"pedidos_cocina/" + pedidoId),{
-      estado:"listo"
-     });
+
+     update(
+      ref(
+       db,
+       "pedidos_cocina/" + pedidoId
+      ),
+      {
+       estado:"listo"
+      }
+     );
+
     };
+
    }
 
    if(btnEntregado){
+
     btnEntregado.onclick = ()=>{
-     update(ref(db,"pedidos_cocina/" + pedidoId),{
-      estado:"entregado"
-     });
+
+     update(
+      ref(
+       db,
+       "pedidos_cocina/" + pedidoId
+      ),
+      {
+       estado:"entregado"
+      }
+     );
+
     };
+
    }
 
    if(btnCancelar){
+
     btnCancelar.onclick = ()=>{
-     update(ref(db,"pedidos_cocina/" + pedidoId),{
-      estado:"cancelado"
-     });
+
+     update(
+      ref(
+       db,
+       "pedidos_cocina/" + pedidoId
+      ),
+      {
+       estado:"cancelado"
+      }
+     );
+
     };
+
    }
 
   },100);
 
  });
 
- ventasHoy.innerText = "Gs. " + totalGeneral.toLocaleString();
- cantidadPedidos.innerText = totalPedidos;
- cantidadDelivery.innerText = totalDeliverys;
+ ventasHoy.innerText =
+ "Gs. " +
+ totalGeneral.toLocaleString();
 
- const historialBox = document.getElementById("historial-delivery");
+ cantidadPedidos.innerText =
+ totalPedidos;
+
+ cantidadDelivery.innerText =
+ totalDeliverys;
+
+ const historialBox =
+ document.getElementById(
+  "historial-delivery"
+ );
 
  if(historialBox){
-  historialBox.innerHTML = historialDeliveryHTML;
+
+  historialBox.innerHTML =
+  historialDeliveryHTML;
+
  }
 
 });
